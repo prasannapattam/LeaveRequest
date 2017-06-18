@@ -1,1 +1,68 @@
-﻿Index
+﻿<html ng-app="lrApp">
+<head>
+    <title>Tools</title>
+</head>
+<body>
+    <div ng-controller="IndexController as index">
+        <table>
+            <tr>
+                <td>
+                    <b>ABI</b>
+                    <br />
+                    <textarea ng-model="index.abi" rows="10" cols="80"></textarea>
+                </td>
+                <td>
+                    <b>Data</b>
+                    <br />
+                    <textarea ng-model="index.data" rows="10" cols="80"></textarea>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <button ng-click="index.decode()" style="height:40px;width:100px">Decode</button>
+        <br />
+        <hr>
+        <br /><br />
+        <div ng-show="index.decodedData.name !== undefined">
+            Name: <b>{{index.decodedData.name}}</b>
+            <br /><br />
+            <i>Parameters</i>
+            <table>
+                <tr ng-repeat="param in index.decodedData.params">
+                    <td>{{param.name}}</td>
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                    <td><b>{{param.value}}</b></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="~/scripts//angular.min.js"></script>
+    <script src="~/scripts/abi-decoder.js"></script>
+    <script>
+        angular.module('lrApp', [])
+            .controller('IndexController', function () {
+                var ctrl = this;
+                ctrl.decodedData = {};
+                ctrl.abi = "";
+                ctrl.data = "";
+
+                ctrl.decode = function () {
+
+                    // var testABI = [{ "constant": true, "inputs": [{ "name": "id", "type": "uint256" }], "name": "getEmployee", "outputs": [{ "name": "", "type": "uint256" }, { "name": "", "type": "string" }, { "name": "", "type": "uint256" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "id", "type": "uint256" }, { "name": "name", "type": "string" }], "name": "addEmployee", "outputs": [], "payable": false, "type": "function" }, { "inputs": [], "payable": false, "type": "constructor" }];
+                    // var testData = "0xd5063e040000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000054b756d6172000000000000000000000000000000000000000000000000000000";
+                    var tempAbi = JSON.parse(ctrl.abi);
+                    var tempData = ctrl.data;
+
+                    abiDecoder.addABI(tempAbi);
+                    ctrl.decodedData = abiDecoder.decodeMethod(tempData);
+                    console.log(ctrl.decodedData);
+
+                }
+            });
+
+    </script>
+</body>
+</html>
+
+
