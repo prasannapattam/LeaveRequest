@@ -35,8 +35,11 @@
                 </tr>
             </table>
         </div>
+        <br />
+        <br />
+        <hr>
     </div>
-
+    <a href="/home/contract">Contract</a>
     <script src="~/scripts//angular.min.js"></script>
     <script src="~/scripts/abi-decoder.js"></script>
     <script>
@@ -44,7 +47,7 @@
             .controller('IndexController', function () {
                 var ctrl = this;
                 ctrl.decodedData = {};
-                ctrl.abi = "";
+                ctrl.abi = JSON.stringify(@Html.Raw(LRWeb.ProfileContract.Abi));
                 ctrl.data = "";
 
                 ctrl.decode = function () {

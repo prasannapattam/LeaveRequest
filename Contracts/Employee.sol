@@ -1,24 +1,38 @@
+
 pragma solidity ^0.4.11;
 
-contract Employee {
+contract Profile {
 
-    struct Person {
-        uint id;
-        string name;
-        uint managerId;
+    struct Instance {
+        string FormCode;
+        string Comments;
+        string Approver;
     }
 
-    mapping(uint => Person) persons;
+    mapping(string => Instance) instances;       
+            
 
-    function Employee() {
-        
+
+    function Create(string FormCode, string Comments, string Approver) public {
+        instances[FormCode] = Instance({ FormCode: FormCode, Comments: Comments,  Approver: Approver});
     }
 
-    function addEmployee(uint id, string name) public {
-        persons[id] = Person({ id: id, name: name, managerId: 0 });
+
+
+    function SubmitToManager(string FormCode, string Comments, string Approver) public {
+        instances[FormCode] = Instance({ FormCode: FormCode, Comments: Comments,  Approver: Approver});
     }
 
-    function getEmployee(uint id) public constant returns(uint, string, uint) {
-        return (persons[id].id, persons[id].name, persons[id].managerId);
+
+
+    function SubmitToDirector(string FormCode, string Comments, string Approver) public {
+        instances[FormCode] = Instance({ FormCode: FormCode, Comments: Comments,  Approver: Approver});
     }
+
+
+
+    function Complete(string FormCode, string Comments, string Approver) public {
+        instances[FormCode] = Instance({ FormCode: FormCode, Comments: Comments,  Approver: Approver});
+    }
+
 }

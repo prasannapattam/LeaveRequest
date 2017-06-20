@@ -1,0 +1,78 @@
+﻿<html ng-app="lrApp">
+<head>
+    <title>Tools</title>
+</head>
+<body>
+    <div ng-controller="ContractController as contract">
+        <h3>Contract</h3>
+        <input type="text" ng-model="contract.states" style="width:500px" />
+        <br />
+        <button ng-click="contract.registerContract()">Register</button>
+        <hr />
+        <h3>Initiate</h3>
+        <table>
+            <tr>
+                <td>State</td>
+                <td>
+                    <input type="text" ng-model="contract.contractData.state" style="width:300px" />
+                </td>
+            </tr>
+            <tr>
+                <td>Form Code</td>
+                <td>
+                    <input type="text" ng-model="contract.contractData.formCode" style="width:300px" />
+                </td>
+            </tr>
+            <tr>
+                <td>Comments</td>
+                <td>
+                    <input type="text" ng-model="contract.contractData.comments" style="width:300px" />
+                </td>
+            </tr>
+            <tr>
+                <td>Approver</td>
+                <td>
+                    <input type="text" ng-model="contract.contractData.approver" style="width:300px" />
+                </td>
+            </tr>
+        </table>
+        <br />
+        <button ng-click="contract.initiateContract()">Initiate</button>
+    </div>
+
+    <script src="~/scripts/angular.min.js"></script>
+    <script src="~/scripts/abi-decoder.js"></script>
+    <script>
+        angular.module('lrApp', [])
+            .controller('ContractController', function ($http) {
+                var ctrl = this;
+                ctrl.states = "Create,SubmitToManager,SubmitToDirector,Complete";
+                ctrl.contractData = {
+                    state: "",
+                    formCode: "",
+                    comments: "",
+                    approver: ""
+                }
+
+                ctrl.decode = function () {
+
+                    var tempAbi = JSON.parse(ctrl.abi);
+                    var tempData = ctrl.data;
+
+                    abiDecoder.addABI(tempAbi);
+                    ctrl.decodedData = abiDecoder.decodeMethod(tempData);
+                    console.log(ctrl.decodedData);
+
+                }
+
+                ctrl.registerContract = function () {
+                    $http.post("/home/registercontract", { states: ctrl.states });
+                }
+
+                ctrl.initiateContract = function () {
+                    $http.post("/home/initiatecontract", ctrl.contractData);
+                }
+            });
+    </script>
+</body>
+</html>
